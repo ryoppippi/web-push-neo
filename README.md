@@ -1,5 +1,16 @@
 <h1 align="center">modern-web-push</h1>
 
+A modern, runtime-agnostic fork of [web-push](https://github.com/web-push-libs/web-push), rewritten in TypeScript.
+
+## Key changes from the original `web-push`
+
+- **Runtime-agnostic** — uses Web Crypto API + `fetch` instead of Node.js `crypto` / `https`. Works in Node.js, Deno, Bun, Cloudflare Workers, and any environment with Web Crypto support.
+- **TypeScript / ESM-only** — fully typed, tree-shakeable, no CJS.
+- **Stateless API** — no global `setVapidDetails()` / `setGCMAPIKey()`. VAPID details are passed per-call.
+- **aes128gcm only** — dropped the legacy `aesgcm` encoding. All modern browsers (including Safari 16+) support `aes128gcm`.
+- **No GCM** — Google Cloud Messaging was deprecated in 2019. FCM works via VAPID.
+- **1 dependency** — only [jose](https://github.com/panva/jose) for JWT signing (also runtime-agnostic).
+
 # Why
 
 Web push requires that push messages triggered from a backend be done via the
@@ -18,13 +29,24 @@ runtime with Web Crypto support.
 # Usage
 
 ```typescript
-import { generateVAPIDKeys, sendNotification } from 'modern-web-push';
+import {
+	generateVAPIDKeys,
+	sendNotification,
+	type PushSubscription,
+	type VapidDetails,
+} from 'modern-web-push';
 
 // VAPID keys should be generated only once.
 const vapidKeys = await generateVAPIDKeys();
 
+const vapidDetails: VapidDetails = {
+	subject: 'mailto:example@yourdomain.org',
+	publicKey: vapidKeys.publicKey,
+	privateKey: vapidKeys.privateKey,
+};
+
 // This is the same output of calling JSON.stringify on a PushSubscription
-const pushSubscription = {
+const pushSubscription: PushSubscription = {
 	endpoint: '.....',
 	keys: {
 		auth: '.....',
@@ -33,11 +55,7 @@ const pushSubscription = {
 };
 
 await sendNotification(pushSubscription, 'Your Push Payload Text', {
-	vapidDetails: {
-		subject: 'mailto:example@yourdomain.org',
-		publicKey: vapidKeys.publicKey,
-		privateKey: vapidKeys.privateKey,
-	},
+	vapidDetails,
 });
 ```
 
@@ -58,9 +76,14 @@ registration.pushManager.subscribe({
 ## sendNotification(pushSubscription, payload, options)
 
 ```typescript
-import { sendNotification } from 'modern-web-push';
+import {
+	sendNotification,
+	type PushSubscription,
+	type SendNotificationOptions,
+	type SendResult,
+} from 'modern-web-push';
 
-const pushSubscription = {
+const pushSubscription: PushSubscription = {
 	endpoint: '< Push Subscription URL >',
 	keys: {
 		p256dh: '< User Public Encryption Key >',
@@ -70,7 +93,7 @@ const pushSubscription = {
 
 const payload = '< Push Payload String >';
 
-const options = {
+const options: SendNotificationOptions = {
 	vapidDetails: {
 		subject: "< 'mailto' Address or URL >",
 		publicKey: '< URL Safe Base64 Encoded Public Key >',
@@ -85,7 +108,7 @@ const options = {
 	signal: AbortSignal.timeout(5000),
 };
 
-const result = await sendNotification(pushSubscription, payload, options);
+const result: SendResult = await sendNotification(pushSubscription, payload, options);
 ```
 
 > **Note:** `sendNotification()` does not require a payload. You can also
@@ -167,9 +190,9 @@ URL Safe Base64 encoded strings. The private key is in PKCS8 format.
 ## generateRequestDetails(pushSubscription, payload, options)
 
 ```typescript
-import { generateRequestDetails } from 'modern-web-push';
+import { generateRequestDetails, type RequestDetails } from 'modern-web-push';
 
-const details = await generateRequestDetails(pushSubscription, payload, options);
+const details: RequestDetails = await generateRequestDetails(pushSubscription, payload, options);
 // details contains: endpoint, method, headers, body
 ```
 
