@@ -7,5 +7,6 @@ export default defineConfig({
 	clean: true,
 	dts: true,
 	publint: true,
+	unused: true,
 	nodeProtocol: true,
 });

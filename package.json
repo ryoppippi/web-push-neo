@@ -55,6 +55,7 @@
 		"oxlint-tsgolint": "^0.17.4",
 		"publint": "^0.3.18",
 		"tsdown": "^0.21.5",
+		"unplugin-unused": "^0.5.7",
 		"vitest": "^4.1.2"
 	},
 	"devEngines": {
