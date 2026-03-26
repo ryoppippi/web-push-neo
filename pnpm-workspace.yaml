@@ -16,6 +16,7 @@ catalogs:
     oxfmt: ^0.42.0
     oxlint: ^1.57.0
     oxlint-tsgolint: ^0.17.4
+    pkg-pr-new: ^0.0.66
     publint: ^0.3.18
     tsdown: ^0.21.5
     unplugin-unused: ^0.5.7

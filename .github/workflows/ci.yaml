@@ -27,6 +27,13 @@ jobs:
       - uses: ./.github/actions/setup-nix
       - run: nix develop --command pnpm run build
 
+  pkg-pr-new:
+    runs-on: ubuntu-24.04-arm
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: ./.github/actions/setup-nix
+      - run: nix develop --command pnpm pkg-pr-new publish --pnpm
+
   spell-check:
     runs-on: ubuntu-24.04-arm
     steps:

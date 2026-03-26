@@ -53,6 +53,7 @@
 		"oxfmt": "catalog:dev",
 		"oxlint": "catalog:dev",
 		"oxlint-tsgolint": "catalog:dev",
+		"pkg-pr-new": "catalog:dev",
 		"publint": "catalog:dev",
 		"tsdown": "catalog:dev",
 		"unplugin-unused": "catalog:dev",
