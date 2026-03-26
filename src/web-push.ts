@@ -52,43 +52,72 @@ function validateUrgency(urgency: string): urgency is UrgencyType {
 	return URGENCY_VALUES.has(urgency);
 }
 
-export async function generateRequestDetails(
-	subscription: PushSubscription,
-	payload?: string | Uint8Array<ArrayBuffer> | null,
-	options?: SendNotificationOptions,
-): Promise<RequestDetails> {
+function validateSubscription(subscription: PushSubscription, hasPayload: boolean): void {
 	if (typeof subscription?.endpoint !== 'string' || subscription.endpoint.length === 0) {
 		throw new Error('You must pass in a subscription with at least an endpoint.');
 	}
 
+	if (!hasPayload) {
+		return;
+	}
+
 	if (
-		// oxlint-disable-next-line no-negated-condition -- != null intentionally checks both null and undefined
-		payload != null &&
-		(typeof subscription.keys?.p256dh !== 'string' ||
-			typeof subscription.keys?.auth !== 'string' ||
-			subscription.keys.p256dh.length === 0 ||
-			subscription.keys.auth.length === 0)
+		typeof subscription.keys?.p256dh !== 'string' ||
+		typeof subscription.keys?.auth !== 'string' ||
+		subscription.keys.p256dh.length === 0 ||
+		subscription.keys.auth.length === 0
 	) {
 		throw new Error(
 			"To send a message with a payload, the subscription must have 'auth' and 'p256dh' keys.",
 		);
 	}
 
-	const ttl = options?.TTL ?? DEFAULT_TTL;
-	const urgency = options?.urgency ?? Urgency.NORMAL;
-	const topic = options?.topic;
+	const p256dhBytes = base64UrlToUint8Array(subscription.keys.p256dh);
+	if (p256dhBytes.length !== 65) {
+		throw new Error('The subscription p256dh value should be 65 bytes long.');
+	}
 
+	const authBytes = base64UrlToUint8Array(subscription.keys.auth);
+	if (authBytes.length < 16) {
+		throw new Error('The subscription auth key should be at least 16 bytes long.');
+	}
+}
+
+function validateOptions(options?: SendNotificationOptions): {
+	ttl: number;
+	urgency: UrgencyType;
+	topic: string | undefined;
+} {
+	const ttl = options?.TTL ?? DEFAULT_TTL;
+	if (typeof ttl !== 'number' || !Number.isInteger(ttl) || ttl < 0) {
+		throw new Error('TTL should be a non-negative integer.');
+	}
+
+	const urgency = options?.urgency ?? Urgency.NORMAL;
 	if (!validateUrgency(urgency)) {
 		throw new Error('Unsupported urgency specified.');
 	}
 
+	const topic = options?.topic;
 	if (topic !== undefined && !validateBase64Url(topic)) {
 		throw new Error('Topic must use URL or filename-safe Base64 characters.');
 	}
-
 	if (topic !== undefined && topic.length > 32) {
 		throw new Error('Topic must be maximum 32 characters.');
 	}
+
+	return { ttl, urgency, topic };
+}
+
+export async function generateRequestDetails(
+	subscription: PushSubscription,
+	payload?: string | Uint8Array<ArrayBuffer> | null,
+	options?: SendNotificationOptions,
+): Promise<RequestDetails> {
+	// oxlint-disable-next-line no-negated-condition -- != null intentionally checks both null and undefined
+	const hasPayload = payload != null;
+	validateSubscription(subscription, hasPayload);
+	const { ttl, urgency, topic } = validateOptions(options);
 
 	const headers: Record<string, string> = {
 		TTL: String(ttl),
@@ -102,8 +131,7 @@ export async function generateRequestDetails(
 
 	let body: Uint8Array<ArrayBuffer> | null = null;
 
-	// oxlint-disable-next-line no-negated-condition -- != null intentionally checks both null and undefined
-	if (payload != null) {
+	if (hasPayload) {
 		const subscriberPublicKey = base64UrlToUint8Array(subscription.keys.p256dh);
 		const authSecret = base64UrlToUint8Array(subscription.keys.auth);
 

@@ -30,7 +30,8 @@
 		"format:oxfmt": "oxfmt --write .",
 		"format:oxlint": "oxlint --max-warnings=0 --fix",
 		"format:knip": "knip --fix --no-exit-code",
-		"typecheck": "oxlint --max-warnings=0"
+		"typecheck": "oxlint --max-warnings=0",
+		"prepack": "pnpm run build"
 	},
 	"dependencies": {
 		"jose": "^6.2.2"

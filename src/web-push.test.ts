@@ -98,6 +98,31 @@ describe('generateRequestDetails', () => {
 		expect(details.headers['Urgency']).toBe('high');
 	});
 
+	it('rejects negative TTL', async () => {
+		const { subscription } = await createTestSubscription();
+		await expect(generateRequestDetails(subscription, null, { TTL: -1 })).rejects.toThrow(
+			'TTL should be a non-negative integer',
+		);
+	});
+
+	it('rejects auth secret shorter than 16 bytes', async () => {
+		const { vapidKeys } = await createTestSubscription();
+		const shortAuth = btoa('short').replaceAll('+', '-').replaceAll('/', '_').replaceAll('=', '');
+		await expect(
+			generateRequestDetails(
+				{ endpoint: ENDPOINT, keys: { p256dh: 'A'.repeat(87), auth: shortAuth } },
+				'test',
+				{
+					vapidDetails: {
+						subject: 'mailto:test@example.com',
+						publicKey: vapidKeys.publicKey,
+						privateKey: vapidKeys.privateKey,
+					},
+				},
+			),
+		).rejects.toThrow('auth key should be at least 16 bytes');
+	});
+
 	it('sets topic header', async () => {
 		const { subscription, vapidKeys } = await createTestSubscription();
 
