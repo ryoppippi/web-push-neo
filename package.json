@@ -9,6 +9,7 @@
 		"type": "git",
 		"url": "git+https://github.com/ryoppippi/web-push-neo.git"
 	},
+	"funding": "https://github.com/ryoppippi/web-push-neo?sponsor=1",
 	"files": [
 		"dist"
 	],
