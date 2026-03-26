@@ -28,7 +28,6 @@
 	"scripts": {
 		"build": "tsdown",
 		"test": "vitest",
-		"preinstall": "npx only-allow pnpm",
 		"lint": "pnpm --no-bail --aggregate-output /^lint:/",
 		"lint:oxfmt": "oxfmt --check .",
 		"lint:oxlint": "oxlint --max-warnings=0",
