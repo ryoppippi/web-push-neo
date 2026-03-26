@@ -2,5 +2,5 @@ import type { KnipConfig } from 'knip';
 
 export default {
 	ignoreBinaries: ['only-allow'],
-	ignoreDependencies: ['@typescript/native-preview'],
+	ignoreDependencies: ['@typescript/native-preview', 'changelogithub'],
 } satisfies KnipConfig;

@@ -37,6 +37,8 @@
 		"format:oxlint": "oxlint --max-warnings=0 --fix",
 		"format:knip": "knip --fix --no-exit-code",
 		"typecheck": "oxlint --max-warnings=0",
+		"prerelease": "pnpm run lint && pnpm run typecheck && pnpm run build",
+		"release": "pnpm bumpp",
 		"prepack": "pnpm run build"
 	},
 	"dependencies": {
@@ -44,6 +46,8 @@
 	},
 	"devDependencies": {
 		"@typescript/native-preview": "^7.0.0-dev.20260326.1",
+		"bumpp": "^11.0.1",
+		"changelogithub": "^14.0.0",
 		"knip": "^6.0.6",
 		"msw": "^2.12.14",
 		"oxfmt": "^0.42.0",
