@@ -34,7 +34,7 @@ export default defineConfig({
 		complexity: ['error', { max: 30 }],
 		eqeqeq: ['error', 'always', { null: 'ignore' }],
 		'max-lines-per-function': ['error', { max: 100 }],
-		'no-negated-condition': 'off',
+
 
 		'typescript/no-unused-vars': [
 			'error',

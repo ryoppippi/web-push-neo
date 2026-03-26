@@ -62,6 +62,7 @@ export async function generateRequestDetails(
 	}
 
 	if (
+		// oxlint-disable-next-line no-negated-condition -- != null intentionally checks both null and undefined
 		payload != null &&
 		(typeof subscription.keys?.p256dh !== 'string' ||
 			typeof subscription.keys?.auth !== 'string' ||
@@ -101,6 +102,7 @@ export async function generateRequestDetails(
 
 	let body: Uint8Array<ArrayBuffer> | null = null;
 
+	// oxlint-disable-next-line no-negated-condition -- != null intentionally checks both null and undefined
 	if (payload != null) {
 		const subscriberPublicKey = base64UrlToUint8Array(subscription.keys.p256dh);
 		const authSecret = base64UrlToUint8Array(subscription.keys.auth);
