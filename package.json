@@ -21,9 +21,15 @@
 	"scripts": {
 		"build": "tsdown",
 		"test": "vitest",
-		"lint": "oxlint --max-warnings=0",
-		"format": "oxfmt --write .",
-		"format:check": "oxfmt --check .",
+		"preinstall": "npx only-allow pnpm",
+		"lint": "pnpm --no-bail --aggregate-output /^lint:/",
+		"lint:oxfmt": "oxfmt --check .",
+		"lint:oxlint": "oxlint --max-warnings=0",
+		"lint:knip": "knip",
+		"format": "pnpm --no-bail --aggregate-output /^format:/",
+		"format:oxfmt": "oxfmt --write .",
+		"format:oxlint": "oxlint --max-warnings=0 --fix",
+		"format:knip": "knip --fix --no-exit-code",
 		"typecheck": "oxlint --max-warnings=0"
 	},
 	"dependencies": {
@@ -31,6 +37,7 @@
 	},
 	"devDependencies": {
 		"@typescript/native-preview": "^7.0.0-dev.20260326.1",
+		"knip": "^6.0.6",
 		"msw": "^2.12.14",
 		"oxfmt": "^0.42.0",
 		"oxlint": "^1.57.0",
@@ -48,5 +55,5 @@
 			}
 		]
 	},
-	"packageManager": "pnpm@10.29.2"
+	"packageManager": "pnpm@10.33.0"
 }
