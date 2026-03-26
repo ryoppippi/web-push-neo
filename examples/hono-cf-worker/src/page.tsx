@@ -27,6 +27,12 @@ const clientScript = html`
 					return;
 				}
 
+				const existing = await reg.pushManager.getSubscription();
+				if (existing) {
+					await existing.unsubscribe();
+					log('Unsubscribed from previous subscription');
+				}
+
 				const sub = await reg.pushManager.subscribe({
 					userVisibleOnly: true,
 					applicationServerKey: publicKey,
