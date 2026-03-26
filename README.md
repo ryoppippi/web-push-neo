@@ -1,5 +1,12 @@
 <h1 align="center">web-push-neo</h1>
 
+<p align="center">
+    <a href="https://socket.dev/api/npm/package/web-push-neo"><img src="https://socket.dev/api/badge/npm/package/web-push-neo" alt="Socket Badge" /></a>
+    <a href="https://npmjs.com/package/web-push-neo"><img src="https://img.shields.io/npm/v/web-push-neo?color=yellow" alt="npm version" /></a>
+    <a href="https://tanstack.com/stats/npm?packageGroups=%5B%7B%22packages%22:%5B%7B%22name%22:%22web-push-neo%22%7D%5D%7D%5D&range=30-days&transform=none&binType=daily&showDataMode=all&height=400"><img src="https://img.shields.io/npm/dt/web-push-neo" alt="NPM Downloads" /></a>
+    <a href="https://packagephobia.com/result?p=web-push-neo"><img src="https://packagephobia.com/badge?p=web-push-neo" alt="install size" /></a>
+</p>
+
 A modern, runtime-agnostic fork of [web-push](https://github.com/web-push-libs/web-push), rewritten in TypeScript.
 
 # Why fork?
