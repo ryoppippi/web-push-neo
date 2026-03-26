@@ -1,6 +1,6 @@
 import { Hono } from 'hono';
-import { generateVAPIDKeys, sendNotification } from 'modern-web-push';
-import type { PushSubscription, VapidDetails } from 'modern-web-push';
+import { generateVAPIDKeys, sendNotification } from 'web-push-neo';
+import type { PushSubscription, VapidDetails } from 'web-push-neo';
 
 interface Env {
 	VAPID_PUBLIC_KEY?: string;

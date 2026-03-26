@@ -1,13 +1,13 @@
 {
-	"name": "modern-web-push",
+	"name": "web-push-neo",
 	"version": "0.0.0",
 	"description": "Runtime-agnostic Web Push library using Web Crypto API",
-	"homepage": "https://github.com/ryoppippi/modern-web-push#readme",
-	"bugs": "https://github.com/ryoppippi/modern-web-push/issues",
+	"homepage": "https://github.com/ryoppippi/web-push-neo#readme",
+	"bugs": "https://github.com/ryoppippi/web-push-neo/issues",
 	"license": "MPL-2.0",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/ryoppippi/modern-web-push.git"
+		"url": "git+https://github.com/ryoppippi/web-push-neo.git"
 	},
 	"files": [
 		"dist"

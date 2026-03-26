@@ -1,4 +1,4 @@
-<h1 align="center">modern-web-push</h1>
+<h1 align="center">web-push-neo</h1>
 
 A modern, runtime-agnostic fork of [web-push](https://github.com/web-push-libs/web-push), rewritten in TypeScript.
 
@@ -24,7 +24,7 @@ runtime with Web Crypto support.
 
 # Install
 
-    pnpm add modern-web-push
+    pnpm add web-push-neo
 
 # Usage
 
@@ -34,7 +34,7 @@ import {
 	sendNotification,
 	type PushSubscription,
 	type VapidDetails,
-} from 'modern-web-push';
+} from 'web-push-neo';
 
 // VAPID keys should be generated only once.
 const vapidKeys = await generateVAPIDKeys();
@@ -81,7 +81,7 @@ import {
 	type PushSubscription,
 	type SendNotificationOptions,
 	type SendResult,
-} from 'modern-web-push';
+} from 'web-push-neo';
 
 const pushSubscription: PushSubscription = {
 	endpoint: '< Push Subscription URL >',
@@ -165,7 +165,7 @@ values on the returned object or error.
 ## generateVAPIDKeys()
 
 ```typescript
-import { generateVAPIDKeys } from 'modern-web-push';
+import { generateVAPIDKeys } from 'web-push-neo';
 
 const vapidKeys = await generateVAPIDKeys();
 
@@ -190,7 +190,7 @@ URL Safe Base64 encoded strings. The private key is in PKCS8 format.
 ## generateRequestDetails(pushSubscription, payload, options)
 
 ```typescript
-import { generateRequestDetails, type RequestDetails } from 'modern-web-push';
+import { generateRequestDetails, type RequestDetails } from 'web-push-neo';
 
 const details: RequestDetails = await generateRequestDetails(pushSubscription, payload, options);
 // details contains: endpoint, method, headers, body
@@ -217,7 +217,7 @@ A promise that resolves to an object containing all the details needed to make a
 
 # Differences from `web-push`
 
-| Feature         | `web-push`                | `modern-web-push`         |
+| Feature         | `web-push`                | `web-push-neo`            |
 | --------------- | ------------------------- | ------------------------- |
 | Runtime         | Node.js only              | Any (Web Crypto + fetch)  |
 | Language        | JavaScript                | TypeScript                |

@@ -3,7 +3,7 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-		<title>modern-web-push example</title>
+		<title>web-push-neo example</title>
 		<style>
 			body {
 				font-family: system-ui, sans-serif;
@@ -29,7 +29,7 @@
 		</style>
 	</head>
 	<body>
-		<h1>modern-web-push example</h1>
+		<h1>web-push-neo example</h1>
 		<p>Cloudflare Worker + Hono backend with Web Push notifications.</p>
 
 		<div>
@@ -96,7 +96,7 @@
 						method: 'POST',
 						headers: { 'Content-Type': 'application/json' },
 						body: JSON.stringify({
-							title: 'Hello from modern-web-push!',
+							title: 'Hello from web-push-neo!',
 							body: 'This notification was sent via a Cloudflare Worker.',
 						}),
 					});

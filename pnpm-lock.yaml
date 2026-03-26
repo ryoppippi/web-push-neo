@@ -113,7 +113,7 @@ importers:
       hono:
         specifier: catalog:examples
         version: 4.12.9
-      modern-web-push:
+      web-push-neo:
         specifier: workspace:*
         version: link:../..
     devDependencies:

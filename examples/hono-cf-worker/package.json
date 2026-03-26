@@ -9,7 +9,7 @@
 	},
 	"dependencies": {
 		"hono": "catalog:examples",
-		"modern-web-push": "workspace:*"
+		"web-push-neo": "workspace:*"
 	},
 	"devDependencies": {
 		"@cloudflare/workers-types": "catalog:examples",
