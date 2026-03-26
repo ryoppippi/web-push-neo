@@ -1,0 +1,8 @@
+{
+	"name": "modern-web-push-example",
+	"main": "src/index.ts",
+	"compatibility_date": "2025-03-26",
+	"assets": {
+		"directory": "public",
+	},
+}

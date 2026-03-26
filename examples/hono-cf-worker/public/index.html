@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>modern-web-push example</title>
+		<style>
+			body {
+				font-family: system-ui, sans-serif;
+				max-width: 600px;
+				margin: 2rem auto;
+				padding: 0 1rem;
+			}
+			button {
+				padding: 0.5rem 1rem;
+				margin: 0.5rem 0.5rem 0.5rem 0;
+				cursor: pointer;
+			}
+			#log {
+				background: #f5f5f5;
+				padding: 1rem;
+				border-radius: 4px;
+				white-space: pre-wrap;
+				font-family: monospace;
+				font-size: 0.85rem;
+				max-height: 300px;
+				overflow-y: auto;
+			}
+		</style>
+	</head>
+	<body>
+		<h1>modern-web-push example</h1>
+		<p>Cloudflare Worker + Hono backend with Web Push notifications.</p>
+
+		<div>
+			<button id="subscribe">Subscribe to Push</button>
+			<button id="send" disabled>Send Test Notification</button>
+		</div>
+
+		<h2>Log</h2>
+		<div id="log"></div>
+
+		<script>
+			const logEl = document.getElementById('log');
+			const subscribeBtn = document.getElementById('subscribe');
+			const sendBtn = document.getElementById('send');
+
+			function log(msg) {
+				logEl.textContent += msg + '\n';
+				logEl.scrollTop = logEl.scrollHeight;
+			}
+
+			subscribeBtn.addEventListener('click', async () => {
+				try {
+					const reg = await navigator.serviceWorker.register('/sw.js');
+					log('Service Worker registered');
+
+					const res = await fetch('/api/vapid-public-key');
+					const { publicKey } = await res.json();
+					log('VAPID public key: ' + publicKey.slice(0, 20) + '...');
+
+					const permission = await Notification.requestPermission();
+					if (permission !== 'granted') {
+						log('Notification permission denied');
+						return;
+					}
+
+					const sub = await reg.pushManager.subscribe({
+						userVisibleOnly: true,
+						applicationServerKey: publicKey,
+					});
+					log('Push subscription created');
+
+					const subJson = sub.toJSON();
+					await fetch('/api/subscribe', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({
+							endpoint: subJson.endpoint,
+							keys: {
+								p256dh: subJson.keys.p256dh,
+								auth: subJson.keys.auth,
+							},
+						}),
+					});
+					log('Subscription sent to server');
+					sendBtn.disabled = false;
+				} catch (err) {
+					log('Error: ' + err.message);
+				}
+			});
+
+			sendBtn.addEventListener('click', async () => {
+				try {
+					const res = await fetch('/api/send', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({
+							title: 'Hello from modern-web-push!',
+							body: 'This notification was sent via a Cloudflare Worker.',
+						}),
+					});
+					const result = await res.json();
+					log('Sent: ' + result.sent + ', Failed: ' + result.failed);
+				} catch (err) {
+					log('Error: ' + err.message);
+				}
+			});
+		</script>
+	</body>
+</html>

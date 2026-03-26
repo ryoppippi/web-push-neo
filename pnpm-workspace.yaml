@@ -1,4 +1,36 @@
-onlyBuiltDependencies:
-  - msw
+packages:
+  - .
+  - examples/*
+
+catalogMode: strict
+
+catalogs:
+  default:
+    jose: ^6.2.2
+  dev:
+    '@typescript/native-preview': ^7.0.0-dev.20260326.1
+    bumpp: ^11.0.1
+    changelogithub: ^14.0.0
+    knip: ^6.0.6
+    msw: ^2.12.14
+    oxfmt: ^0.42.0
+    oxlint: ^1.57.0
+    oxlint-tsgolint: ^0.17.4
+    publint: ^0.3.18
+    tsdown: ^0.21.5
+    unplugin-unused: ^0.5.7
+    vitest: ^4.1.2
+  examples:
+    hono: ^4.7.13
+    '@cloudflare/workers-types': ^4.20250326.0
+    portless: ^0.7.2
+    wrangler: ^4.23.0
 
 enablePrePostScripts: true
+
+onlyBuiltDependencies:
+  - esbuild
+  - msw
+  - workerd
+
+shellEmulator: true

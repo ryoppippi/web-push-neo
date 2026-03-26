@@ -1,0 +1,19 @@
+{
+	"name": "example-hono-cf-worker",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "portless -- wrangler dev",
+		"deploy": "wrangler deploy"
+	},
+	"dependencies": {
+		"hono": "catalog:examples",
+		"modern-web-push": "workspace:*"
+	},
+	"devDependencies": {
+		"@cloudflare/workers-types": "catalog:examples",
+		"portless": "catalog:examples",
+		"wrangler": "catalog:examples"
+	}
+}

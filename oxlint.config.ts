@@ -10,7 +10,7 @@ export default defineConfig({
 		builtin: true,
 		es2024: true,
 	},
-	ignorePatterns: ['dist', 'node_modules'],
+	ignorePatterns: ['dist', 'node_modules', '**/public/**'],
 	categories: {
 		correctness: 'error',
 		suspicious: 'error',
