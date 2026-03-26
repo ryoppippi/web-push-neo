@@ -13,13 +13,19 @@ const app = new Hono<{ Bindings: Env }>();
 
 const subscriptions: PushSubscription[] = [];
 
-app.get('/api/vapid-public-key', async (c) => {
-	let publicKey = c.env.VAPID_PUBLIC_KEY;
-	if (publicKey === undefined) {
-		const keys = await generateVAPIDKeys();
-		publicKey = keys.publicKey;
+let cachedVapidKeys: { publicKey: string; privateKey: string } | undefined;
+
+async function getVapidKeys(env: Env): Promise<{ publicKey: string; privateKey: string }> {
+	if (typeof env.VAPID_PUBLIC_KEY === 'string' && typeof env.VAPID_PRIVATE_KEY === 'string') {
+		return { publicKey: env.VAPID_PUBLIC_KEY, privateKey: env.VAPID_PRIVATE_KEY };
 	}
-	return c.json({ publicKey });
+	cachedVapidKeys ??= await generateVAPIDKeys();
+	return cachedVapidKeys;
+}
+
+app.get('/api/vapid-public-key', async (c) => {
+	const keys = await getVapidKeys(c.env);
+	return c.json({ publicKey: keys.publicKey });
 });
 
 app.post('/api/subscribe', async (c) => {
@@ -30,11 +36,12 @@ app.post('/api/subscribe', async (c) => {
 
 app.post('/api/send', async (c) => {
 	const { title, body } = await c.req.json<{ title: string; body: string }>();
+	const keys = await getVapidKeys(c.env);
 
 	const vapidDetails: VapidDetails = {
 		subject: c.env.VAPID_SUBJECT ?? 'mailto:test@example.com',
-		publicKey: c.env.VAPID_PUBLIC_KEY ?? '',
-		privateKey: c.env.VAPID_PRIVATE_KEY ?? '',
+		publicKey: keys.publicKey,
+		privateKey: keys.privateKey,
 	};
 
 	const results = await Promise.allSettled(
