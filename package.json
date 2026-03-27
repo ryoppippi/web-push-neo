@@ -11,7 +11,8 @@
 	},
 	"funding": "https://github.com/ryoppippi/web-push-neo?sponsor=1",
 	"files": [
-		"dist"
+		"dist",
+		"src"
 	],
 	"type": "module",
 	"exports": {

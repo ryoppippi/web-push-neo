@@ -6,6 +6,7 @@ export default defineConfig({
 	format: 'esm',
 	clean: true,
 	dts: true,
+	sourcemap: true,
 	publint: true,
 	unused: true,
 	nodeProtocol: true,
